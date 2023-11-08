@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Page</title>
+    <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+    <link rel="stylesheet" href="/static/css/index.css" type="text/css">
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+
+            if (currentTheme === 'dark') {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            } else {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            }
+        }
+    </script>
+
+
+</head>
+
+<body class="light-theme">
+    <div class="main-div">
+        <div class="header" hx-ext="client-side-templates">
+            <ul>
+                <li><a href="#">
+                        <h2>Blog</h2>
+                    </a>
+                </li>
+                <li>
+                    <div hx-get="/newblog" hx-trigger="click" hx-target="#content-div" hx-swap="outer-html"
+                        mustache-template="new-blog">
+                        <h2> + New Blog</h2>
+
+                    </div>
+                </li>
+                <li><a><button onclick=" toggleTheme()" style="align-content: right;"><img class="htmx-indicator"
+                                src="/static/img/icon.png"></button>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="content-div">
+
+
+            <!-- <div id="content-div"> </div> -->
+            <script>
+                document.body.addEventListener('htmx:afterOnLoad', function (event) {
+                    // if (event.detail.trigger.getAttribute('hx-get') === '/newblog') {
+                    // The event.detail.target contains the updated content
+                    const responseContent = event.detail.target;
+
+                    // Create a new DOMParser
+                    const parser = new DOMParser();
+
+                    // Parse the HTML string
+                    const htmlDoc = parser.parseFromString(responseContent, 'text/html');
+                    const form = document.getElementById('formdiv')
+                    form.innerHTML = htmlDoc
+                    console.log(form);
+                    // }
+                });
+            </script>
+            <template id="new-blog">
+
+                <!-- {{#form}} -->
+                <div id="formdiv">
+                    <!-- {{form}} -->
+                </div>
+                <!-- {{/form}} -->
+            </template>
+
+            <div class="left-div" hx-ext="client-side-templates">
+                <div hx-get="/blog/?author_id=1&post_id=0" hx-trigger="load" hx-target="#author"
+                    mustache-template="blog-title">
+                </div>
+
+                <div id="author"></div>
+                <template id="blog-title">
+                    {{#data}}
+                    <h4 hx-get="/blog/?author_id={{author_id}}&post_id={{id}}" hx-trigger="click" hx-target="#result"
+                        mustache-template="blog-content">{{title}} </h4>
+                    {{/data}}
+                </template>
+            </div>
+            <div class="right-div" hx-ext="client-side-templates">
+                <div id="result"></div>
+                <template id="blog-content">
+                    {{#data}}
+
+                    <h2 class="title text-center font-bold"> {{title}}</h2>
+                    <h5> Date Published: {{published_date}}</h5>
+                    <p class="content list list-item my-4"> {{content}}</p>
+
+                    {{/data}}
+                </template>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
