@@ -14,7 +14,9 @@ import (
 // Define the PostgreSQL connection string
 func createConnString() string {
 	password := os.Getenv("DB_PASSWORD")
-	return fmt.Sprintf("host=localhost port=5432 user=drax password=%s dbname=htmx_blog sslmode=disable", password)
+	user := os.Getenv("DB_USERNAME")
+	database := os.Getenv("DB_NAME")
+	return fmt.Sprintf("host=localhost port=5432 user=%s password=%s dbname=%s sslmode=disable", user, password, database)
 }
 
 func InitDb() *sql.DB {
