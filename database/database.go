@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/amren1254/htmx-blog/entity"
@@ -12,7 +13,8 @@ import (
 
 // Define the PostgreSQL connection string
 func createConnString() string {
-	return fmt.Sprintf("host=localhost port=5432 user=drax password=drax dbname=htmx_blog sslmode=disable")
+	password := os.Getenv("DB_PASSWORD")
+	return fmt.Sprintf("host=localhost port=5432 user=drax password=%s dbname=htmx_blog sslmode=disable", password)
 }
 
 func InitDb() *sql.DB {
