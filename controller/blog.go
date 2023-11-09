@@ -9,7 +9,6 @@ import (
 	"github.com/amren1254/htmx-blog/database"
 	"github.com/amren1254/htmx-blog/entity"
 	"github.com/gin-gonic/gin"
-	"github.com/russross/blackfriday/v2"
 )
 
 type DbEnv struct {
@@ -23,13 +22,13 @@ func NewDbEnv(db *sql.DB) *DbEnv {
 // get the requested blog by author
 func (env *DbEnv) GetBlog(c *gin.Context) {
 	// check for db connection by PING() method
-	if err := env.db.Ping(); err != nil {
-		log.Println("Db connection error ", err)
+	var err error
+	err = testDBConnection(env.db)
+	if err != nil {
 		c.JSON(500, gin.H{"message": err})
-		return
 	}
 	var blogRequest entity.BlogRequest
-	var err error
+
 	blogRequest.AuthorId, err = strconv.Atoi(c.Query("author_id"))
 	if err != nil {
 		log.Println("Error getting author id from query string paramter")
@@ -64,12 +63,11 @@ func (env *DbEnv) GetBlog(c *gin.Context) {
 // insert blogs in database
 func (env *DbEnv) InsertBlog(c *gin.Context) {
 	//check for db connection by PING() method
-	if err := env.db.Ping(); err != nil {
-		log.Println("Db connection error ", err)
+	err := testDBConnection(env.db)
+	if err != nil {
 		c.JSON(500, gin.H{"message": err})
-		return
 	}
-	err := c.Request.ParseForm()
+	err = c.Request.ParseForm()
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
@@ -77,18 +75,17 @@ func (env *DbEnv) InsertBlog(c *gin.Context) {
 
 	//bind input json data to blog entity
 	var blog entity.Blog
-	blog.Id, err = strconv.Atoi(c.PostForm("id"))
 	blog.Title = c.PostForm("title")
 	blog.Content = c.PostForm("content")
-	htmlContent := blackfriday.Run([]byte(blog.Content))
-	log.Println(htmlContent)
 	blog.AuthorId, err = strconv.Atoi(c.PostForm("author_id"))
-
-	if err != nil {
-		log.Println("Input form parsing error", err)
-		c.JSON(500, gin.H{"message": err})
-		return
+	if blog.AuthorId == 0 {
+		blog.AuthorId = 1
 	}
+	// if err != nil {
+	// 	log.Println("Input form parsing error", err)
+	// 	c.JSON(500, gin.H{"message": err})
+	// 	return
+	// }
 
 	//call db to insert recvd blog data
 	status, err := database.InsertBlogInDatabase(env.db, blog)
@@ -98,4 +95,37 @@ func (env *DbEnv) InsertBlog(c *gin.Context) {
 	}
 
 	c.JSON(201, gin.H{"Message": "Blog created successfully"})
+}
+
+func testDBConnection(db *sql.DB) error {
+	if err := db.Ping(); err != nil {
+		log.Println("Db connection error ", err)
+		return err
+	}
+	return nil
+}
+
+func (env *DbEnv) InsertAuthor(c *gin.Context) {
+	//check for db connection by PING() method
+	err := testDBConnection(env.db)
+	if err != nil {
+		c.JSON(500, gin.H{"message": err})
+		return
+	}
+	err = c.Request.ParseForm()
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+	var author entity.Author
+	author.Name = c.PostForm("name")
+	author.Email = c.PostForm("email")
+	author.Password = c.PostForm("password")
+
+	status, err := database.InsertAuthor(env.db, author)
+	if err != nil || status == false {
+		c.JSON(500, gin.H{"message": err})
+		return
+	}
+	c.JSON(201, gin.H{"Message": "Author added!"})
 }

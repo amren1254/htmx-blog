@@ -22,12 +22,13 @@ func createConnString() string {
 	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", host, port, user, password, database, sslmode)
 }
 
-func InitDb() *sql.DB {
+func InitDb() (*sql.DB, error) {
 
 	// Open a database connection
 	DB, err := sql.Open("postgres", createConnString())
 	if err != nil {
 		log.Fatal(err)
+		return nil, err
 	}
 	// defer DB.Close() // Close the database connection when done
 
@@ -35,15 +36,16 @@ func InitDb() *sql.DB {
 	err = DB.Ping()
 	if err != nil {
 		log.Fatal(err)
+		return nil, err
 	}
 
 	log.Println("Connected to PostgreSQL")
-	return DB
+	return DB, nil
 }
 
 func InsertBlogInDatabase(db *sql.DB, blog entity.Blog) (bool, error) {
-	query := `INSERT INTO blogpost(post_id, title, content, image_path, author_id, published_date)
-				VALUES($1,$2,$3,$4,$5,$6)`
+	query := `INSERT INTO blogpost(title, content, image_path, author_id, published_date)
+				VALUES($1,$2,$3,$4,$5)`
 	insert, err := db.Prepare(query)
 	if err != nil {
 		log.Println("Query Error : ", err)
@@ -53,7 +55,6 @@ func InsertBlogInDatabase(db *sql.DB, blog entity.Blog) (bool, error) {
 
 	var datetime = time.Now().UTC()
 	queryResponse, err := insert.Exec(
-		blog.Id,
 		blog.Title,
 		blog.Content,
 		blog.ImagePath,
@@ -113,4 +114,29 @@ func GetBlogDataForAuthor(db *sql.DB, blogReq entity.BlogRequest) ([]entity.Blog
 		blog = append(blog, newBlog)
 	}
 	return blog, nil
+}
+
+func InsertAuthor(db *sql.DB, author entity.Author) (bool, error) {
+	query := `INSERT INTO author(author_name, email)
+			VALUES($1,$2)`
+	insert, err := db.Prepare(query)
+	if err != nil {
+		log.Println("Query Error : ", err)
+		return false, err
+	}
+	defer insert.Close()
+
+	queryResponse, err := insert.Exec(
+		author.Name,
+		author.Email,
+	)
+	if err != nil {
+		log.Println("Query Response error :", err)
+		return false, err
+	}
+	if affectedRows, err := queryResponse.RowsAffected(); err != nil || affectedRows != 1 {
+		log.Println("Author insertion failed : ", err)
+		return false, err
+	}
+	return true, nil
 }

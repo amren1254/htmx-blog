@@ -6,8 +6,8 @@
     <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
-    <link rel="stylesheet" href="/static/css/blog.css" type="text/css">
     <link rel="stylesheet" href="/static/css/index.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/blog.css" type="text/css">
     <script>
         function toggleTheme() {
             const body = document.body;
@@ -56,22 +56,17 @@
                 </li>
             </ul>
         </div>
-
         <div>
+            <form class="form-center" hx-post="/author">
+                <h1>Hey! Welcome to the party...</h1>
+                <input placeholder="Name" type="text" id="name" name="name" required><br>
+                <input placeholder="Email" type="email" id="email" name="email" required><br>
+                <input placeholder="Password" Emailtype="password" id="password" name="password" required><br>
 
-            <form class="form-center" id="post-form" hx-post="/blog">
-                <h1>Hey! Let's write something influential</h1>
-                <input placeholder="Title" type="text" id="title" name="title" hx-vals="title" required>
-
-                <textarea placeholder="Content" id="content" name="content" rows="10" hx-vals="content"
-                    required></textarea>
-
-                <button type="submit" hx-post="/blog">Submit</button>
+                <button type="submit" hx-post="author">Create Account</button>
             </form>
-            <div id="response" hx-target="#response">
-            </div>
-
         </div>
+    </div>
 </body>
 
 </html>

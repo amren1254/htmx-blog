@@ -27,85 +27,66 @@
 
 <body class="light-theme">
     <div class="main-div">
-        <div class="header" hx-ext="client-side-templates">
+        <div class="navbar" hx-ext="client-side-templates">
             <ul>
-                <li><a href="#">
-                        <h2>Blog</h2>
+                <li><a href="/">
+
+                        <h2>Home</h2>
+
                     </a>
                 </li>
                 <li>
-                    <div hx-get="/newblog" hx-trigger="click" hx-target="#content-div" hx-swap="outer-html"
-                        mustache-template="new-blog">
-                        <h2> + New Blog</h2>
+                    <a href="/newblog">
 
-                    </div>
+                        <h2>New Blog</h2>
+
+                    </a>
                 </li>
-                <li><a><button onclick=" toggleTheme()" style="align-content: right;"><img class="htmx-indicator"
+                <li>
+                    <a href="/author">
+
+                        <h2>Become an Author</h2>
+
+                    </a>
+                </li>
+                <li><a style="margin-top: 1.3rem;"><button onclick=" toggleTheme()"><img class="htmx-indicator"
                                 src="/static/img/icon.png"></button>
                     </a>
                 </li>
             </ul>
-
         </div>
-
-        <div class="content-div">
-
-
-            <!-- <div id="content-div"> </div> -->
-            <script>
-                document.body.addEventListener('htmx:afterOnLoad', function (event) {
-                    // if (event.detail.trigger.getAttribute('hx-get') === '/newblog') {
-                    // The event.detail.target contains the updated content
-                    const responseContent = event.detail.target;
-
-                    // Create a new DOMParser
-                    const parser = new DOMParser();
-
-                    // Parse the HTML string
-                    const htmlDoc = parser.parseFromString(responseContent, 'text/html');
-                    const form = document.getElementById('formdiv')
-                    form.innerHTML = htmlDoc
-                    console.log(form);
-                    // }
-                });
-            </script>
-            <template id="new-blog">
-
-                <!-- {{#form}} -->
-                <div id="formdiv">
-                    <!-- {{form}} -->
-                </div>
-                <!-- {{/form}} -->
-            </template>
-
-            <div class="left-div" hx-ext="client-side-templates">
-                <div hx-get="/blog/?author_id=1&post_id=0" hx-trigger="load" hx-target="#author"
-                    mustache-template="blog-title">
-                </div>
-
-                <div id="author"></div>
-                <template id="blog-title">
-                    {{#data}}
-                    <h4 hx-get="/blog/?author_id={{author_id}}&post_id={{id}}" hx-trigger="click" hx-target="#result"
-                        mustache-template="blog-content">{{title}} </h4>
-                    {{/data}}
-                </template>
-            </div>
-            <div class="right-div" hx-ext="client-side-templates">
-                <div id="result"></div>
-                <template id="blog-content">
-                    {{#data}}
-
-                    <h2 class="title text-center font-bold"> {{title}}</h2>
-                    <h5> Date Published: {{published_date}}</h5>
-                    <p class="content list list-item my-4"> {{content}}</p>
-
-                    {{/data}}
-                </template>
-            </div>
-        </div>
-
     </div>
+
+    <div class="content-div">
+
+
+        <div class="left-div" hx-ext="client-side-templates">
+            <div hx-get="/blog/?author_id=1&post_id=0" hx-trigger="load" hx-target="#author"
+                mustache-template="blog-title">
+            </div>
+
+            <div id="author"></div>
+            <template id="blog-title">
+                {{#data}}
+                <h4 hx-get="/blog/?author_id={{author_id}}&post_id={{id}}" hx-trigger="click" hx-target="#result"
+                    mustache-template="blog-content">{{title}} </h4>
+                {{/data}}
+            </template>
+        </div>
+        <div class="right-div" hx-ext="client-side-templates">
+            <div id="result"></div>
+            <template id="blog-content">
+                {{#data}}
+
+                <h2 class="title text-center font-bold"> {{title}}</h2>
+                <h5> Date Published: {{published_date}}</h5>
+                <p class="content list list-item my-4"> {{content}}</p>
+
+                {{/data}}
+            </template>
+        </div>
+    </div>
+
 </body>
 
 </html>

@@ -1,0 +1,64 @@
+body {
+    /* background-color: #18181a; */
+    color: black;
+}
+
+input {
+    margin-bottom: 2rem;
+    width: 32rem;
+    height: 2rem;
+}
+
+textarea {
+    margin-bottom: 2rem;
+    width: 32rem;
+}
+
+.header {
+    /* background-color: #18181a; */
+    border-bottom: solid 1px white;
+    /* color: #fff; */
+    text-align: left;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: baseline;
+}
+
+.form-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* nav css */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* background-color: #333; */
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    /* color: white; */
+    text-align: left;
+    padding: 14px 16px;
+    /* text-decoration: none; */
+}
+
+.htmx-indicator {
+    height: 1rem;
+    width: 1rem;
+    opacity: 1 !important;
+    transition: opacity 200ms ease-in !important;
+}
