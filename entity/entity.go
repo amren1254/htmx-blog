@@ -11,7 +11,8 @@ type Config struct {
 	CurrentDirectory string
 	StaticFileDir    string `env:"STATIC_FILE_DIR,default=./static"`
 	Server           struct {
-		Port int `env:"PORT default:8081"`
+		Host string `env:"HOST default:localhost"`
+		Port int    `env:"PORT default:8081"`
 	}
 }
 
@@ -38,6 +39,7 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 	cfg.CurrentDirectory = cwd
+	cfg.Server.Host = os.Getenv("HOST")
 	cfg.Server.Port, err = strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		return nil, err
@@ -46,7 +48,7 @@ func LoadConfig() (*Config, error) {
 }
 
 func (c *Config) ServerAddress() string {
-	return fmt.Sprintf(":%d", c.Server.Port)
+	return fmt.Sprintf("%s:%d", c.Server.Host, c.Server.Port)
 }
 
 type Blog struct {

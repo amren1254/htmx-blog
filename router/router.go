@@ -71,6 +71,6 @@ func InitRoute() {
 	), func(c *gin.Context) {
 		c.File("htmx-template/author.html")
 	})
-
+	log.Println("Started listening at ", config.ServerAddress())
 	log.Fatal(http.ListenAndServe(config.ServerAddress(), router))
 }

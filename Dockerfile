@@ -42,7 +42,7 @@ RUN go mod verify
 # Copy the entire project and build it
 # This layer is rebuilt when a file changes in the project directory
 # COPY . /go/src/project/
-RUN GOOS=linux GOARCH=amd64 go build -o app
+RUN GOOS=linux GOARCH=amd64 GIN_MODE=release go build -o app
 
 ############################
 # STEP 2 build a small image
