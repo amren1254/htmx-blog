@@ -53,11 +53,13 @@ func InitRoute() {
 			return l.Output(gin.DefaultWriter).With().Logger()
 		}),
 	), blogHandler.GetBlog)
+
 	router.POST("/blog", logger.SetLogger(
 		logger.WithLogger(func(_ *gin.Context, l zerolog.Logger) zerolog.Logger {
 			return l.Output(gin.DefaultWriter).With().Logger()
 		}),
 	), blogHandler.InsertBlog)
+
 	router.POST("/author", logger.SetLogger(
 		logger.WithLogger(func(_ *gin.Context, l zerolog.Logger) zerolog.Logger {
 			return l.Output(gin.DefaultWriter).With().Logger()
@@ -71,6 +73,7 @@ func InitRoute() {
 	), func(c *gin.Context) {
 		c.File("htmx-template/author.html")
 	})
+
 	log.Println("Started listening at ", config.ServerAddress())
 	log.Fatal(http.ListenAndServe(config.ServerAddress(), router))
 }

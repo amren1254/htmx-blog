@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-
+	log.SetPrefix("blog-app \t")
 	if err := godotenv.Load(".envrc"); err != nil {
 		log.Println("error loading envrc file", err)
 	}
