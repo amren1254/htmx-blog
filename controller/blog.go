@@ -2,9 +2,11 @@ package controller
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/amren1254/htmx-blog/database"
 	"github.com/amren1254/htmx-blog/entity"
@@ -47,6 +49,18 @@ func (env *DbEnv) GetBlog(c *gin.Context) {
 			c.JSON(500, gin.H{"message": err})
 			return
 		}
+		// Parse the date string into a time.Time object
+		parsedTime, err := time.Parse(time.RFC3339, blogData[0].PublishedDate)
+		if err != nil {
+			fmt.Println("Error parsing date:", err)
+			return
+		}
+
+		// Extract date and month components
+		_, _, day := parsedTime.Date()
+
+		monthString := parsedTime.Month().String()
+		blogData[0].PublishedDate = monthString + fmt.Sprintf("%d", day)
 		c.JSON(200, gin.H{"data": blogData})
 		return
 	} else {
@@ -55,6 +69,11 @@ func (env *DbEnv) GetBlog(c *gin.Context) {
 			c.JSON(500, gin.H{"message": err})
 			return
 		}
+		parsedTime, _ := time.Parse(time.RFC3339, blogData.PublishedDate)
+		_, _, day := parsedTime.Date()
+
+		monthString := parsedTime.Month().String()
+		blogData.PublishedDate = monthString[:3] + fmt.Sprintf(" %d", day)
 		c.JSON(200, gin.H{"data": blogData})
 		return
 	}

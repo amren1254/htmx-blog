@@ -6,9 +6,11 @@
     <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="/static/css/index.css" type="text/css">
     <link rel="stylesheet" href="/static/css/blog.css" type="text/css">
-    <script>
+    <!-- <script>
         function toggleTheme() {
             const body = document.body;
             const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
@@ -21,52 +23,60 @@
                 body.classList.add('dark-theme');
             }
         }
-    </script>
+    </script> -->
 
 
 </head>
 
-<body class="light-theme">
-    <div class="main-div">
-        <div class="navbar" hx-ext="client-side-templates">
-            <ul>
-                <li><a href="/">
-
-                        <h2>Home</h2>
-
-                    </a>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light bg-peach-fuzz">
+        <a class="navbar-brand" href="/">Persoanl blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/newblog">Create Blog</a>
                 </li>
-                <li>
-                    <a href="/newblog">
-
-                        <h2>New Blog</h2>
-
-                    </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/author">Become Author</a>
                 </li>
-                <li>
-                    <a href="/author">
-
-                        <h2>Become an Author</h2>
-
-                    </a>
-                </li>
-                <li><a style="margin-top: 1.3rem;"><button onclick=" toggleTheme()"><img class="htmx-indicator"
-                                src="/static/img/icon.png"></button>
-                    </a>
+                <!-- <li>
+                <a class="nav-link"><button onclick=" toggleTheme()"><img class="htmx-indicator"
+                            src="/static/img/icon.png"></button>
+                </a>
+            </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Logout</a>
                 </li>
             </ul>
         </div>
-        <div>
-            <form class="form-center" hx-post="/author">
-                <h1>Hey! Welcome to the party...</h1>
-                <input placeholder="Name" type="text" id="name" name="name" required><br>
-                <input placeholder="Email" type="email" id="email" name="email" required><br>
-                <input placeholder="Password" Emailtype="password" id="password" name="password" required><br>
-
-                <button type="submit" hx-post="author">Create Account</button>
-            </form>
+    </nav>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="mt-4" hx-post="/author">
+                    <h1 class="text-center mb-4">Hey! Welcome to the party...</h1>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Name" type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Email" type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Password" type="password" id="password" name="password"
+                            required>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+
 </body>
 
 </html>

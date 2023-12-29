@@ -8,9 +8,11 @@
     <script src="https://unpkg.com/mustache@latest"></script>
     <script src="https://cdn.tiny.cloud/1/fmh0b57mghasa9fwheu32p3exdv9af0zrsbc8ke2ao4xknxu/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="/static/css/blog.css" type="text/css">
     <link rel="stylesheet" href="/static/css/index.css" type="text/css">
-    <script>
+    <!-- <script>
         function toggleTheme() {
             const body = document.body;
             const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
@@ -23,7 +25,7 @@
                 body.classList.add('dark-theme');
             }
         }
-    </script>
+    </script> -->
     <script>
         tinymce.init({
             selector: 'textarea#content',
@@ -41,55 +43,62 @@
             ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
         });
     </script>
+    <script>
+        function getContentFromEditor() {
+            var content = tinymce.get('content').getContent();
+            document.getElementById('content').value = content; // Update the textarea value
+        }
+    </script>
 </head>
 
-<body class="light-theme">
-    <div class="main-div">
-        <div class="navbar" hx-ext="client-side-templates">
-            <ul>
-                <li><a href="/">
-
-                        <h2>Home</h2>
-
-                    </a>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light bg-peach-fuzz">
+        <a class="navbar-brand" href="/">Persoanl blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/newblog">Create Blog</a>
                 </li>
-                <li>
-                    <a href="/newblog">
-
-                        <h2>New Blog</h2>
-
-                    </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/author">Become Author</a>
                 </li>
-                <li>
-                    <a href="/author">
-
-                        <h2>Become an Author</h2>
-
-                    </a>
-                </li>
-                <li><a style="margin-top: 1.3rem;"><button onclick=" toggleTheme()"><img class="htmx-indicator"
+                <!-- <li>
+                    <a class="nav-link"><button onclick=" toggleTheme()"><img class="htmx-indicator"
                                 src="/static/img/icon.png"></button>
                     </a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Logout</a>
                 </li>
             </ul>
         </div>
+    </nav>
 
-        <div>
-
-            <form class="form-center" id="post-form" hx-post="/blog" hx-trigger="submit" hx-target="#response">
-                <h1>Hey! Let's write something influential</h1>
-                <input placeholder="Title" type="text" id="title" name="title" hx-vals="title" required>
-                <textarea id="content" name="content" hx-vals="content"></textarea>
-                <button type="submit" onclick="getContentFromEditor()">Submit</button>
-            </form>
-            <div id="response"></div>
-            <script>
-                function getContentFromEditor() {
-                    var content = tinymce.get('content').getContent();
-                    document.getElementById('content').value = content; // Update the textarea value
-                }
-            </script>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="mt-4" id="post-form" hx-post="/blog" hx-trigger="submit" hx-target="#response">
+                    <h1 class="text-center mb-4">Hey! Let's write something influential</h1>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Title" type="text" id="title" name="title"
+                            hx-vals="title" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Your content here..." id="content" name="content"
+                            hx-vals="content"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="submit" onclick="getContentFromEditor()">Submit</button>
+                    </div>
+                </form>
+                <div id="response" class="mt-4"></div>
+            </div>
         </div>
+    </div>
 </body>
 
 </html>

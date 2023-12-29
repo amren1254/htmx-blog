@@ -27,7 +27,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light bg-peach-fuzz">
         <a class="navbar-brand" href="/">Persoanl blog</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,7 @@
             <div class="col-md-8 offset-md-2">
                 <h1 class="text-center mb-4">Welcome to Our Blog!</h1>
                 <div id="blogTitles">
+                    <!-- Your existing code for fetching blog titles -->
                     <div hx-ext="client-side-templates">
                         <div hx-get="/blog/?author_id=1&post_id=0" hx-trigger="load" hx-target="#author"
                             mustache-template="blog-title">
@@ -65,46 +66,64 @@
                         </div>
                         <template id="blog-title">
                             {{#data}}
-                            <a href="/htmx-template/blog-content.html"
-                                hx-get="/blog/?author_id={{author_id}}&post_id={{id}}" hx-trigger="click"
-                                hx-target="#result" hx-swap="innerHTML focus-scroll:true show:top"
-                                mustache-template="blog-content">
+                            <a href="#" hx-get="/blog/?author_id={{author_id}}&post_id={{id}}" hx-trigger="click"
+                                hx-target="#result" hx-swap="innerHTML" mustache-template="blog-content">
                                 <h2>{{title}}</h2>
                             </a>
                             {{/data}}
                         </template>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-8 offset-md-2">
+                <div hx-ext="client-side-templates">
+                    <template id="blog-content">
+                        {{#data}}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h2 class="card-title">{{title}}</h2>
+                                <h6 class="card-subtitle mb-2 text-muted"> {{published_date}}</h6>
+                                <div class="card-text">{{{content}}}</div>
+                                <div class="text-center mt-3">
+                                    <a href="#" class="btn btn-primary">Back to All Posts</a>
+                                </div>
+                            </div>
+                        </div>
+                        {{/data}}
+                    </template>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1 class="text-center mb-4">Welcome to Our Blog!</h1>
+                <div id="blogTitles">
+
+                </div>
 
 
             </div>
-        </div>
-        <div hx-ext="client-side-templates">
+        </div> -->
+        <!-- <div hx-ext="client-side-templates">
             <template id="blog-content">
 
                 {{#data}}
 
-                <!-- <h2 class="title text-center font-bold"> {{title}}</h2>
+                <h2 class="title text-center font-bold"> {{title}}</h2>
                 <h5> Date Published: {{published_date}}</h5>
-                <p class="content list list-item my-4 "> {{content}}</p> -->
+                <div class="content list list-item my-6 "> {{{content}}}</div>
 
                 <div class="text-center mt-5">
                     <a href="#" class="btn btn-primary">Back to All Posts</a>
                 </div>
                 {{/data}}
             </template>
-            <script>
-
-                // Get the element where you want to render the HTML
-                const contentElement = document.getElementById('result');
-
-                // Set the received HTML as the innerHTML of the content element
-                contentElement.innerHTML = apiResponse;
-            </script>
         </div>
         <div class="text-center mt-5">
             <a href="#" class="btn btn-primary">Back to All Posts</a>
-        </div>
+        </div> -->
     </div>
 </body>
 
