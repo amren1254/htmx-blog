@@ -6,4 +6,5 @@ Run docker container using
 
 ```
 docker run -it --env-file .envrc blog /bin/bash
+docker run --rm -it --pid container:htmx-blog-app alpine
 ```

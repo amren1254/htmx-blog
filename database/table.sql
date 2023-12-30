@@ -6,7 +6,7 @@ CREATE TABLE author (
 );
 
 INSERT INTO author              
-VALUES ('amren', 'amren1254@gmail.com');
+VALUES (1, 'amren', 'amren1254@gmail.com');
 
 
 -- Table to store blog posts
@@ -19,8 +19,8 @@ CREATE TABLE blogpost (
     published_date DATE,
     FOREIGN KEY (author_id) REFERENCES author(author_id)
 );
-INSERT INTO blogpost(title, content, image_path, author_id, published_date) 
-VALUES('Learn Go', 'This is a test golang text', '/static/img/logo.png', 1, CURRENT_TIMESTAMP);
+INSERT INTO blogpost(post_id, title, content, image_path, author_id, published_date) 
+VALUES(1, 'Learn Go', 'This is a test golang text', '/static/img/logo.png', 1, CURRENT_TIMESTAMP);
 
 -- Table to store comments on blog posts
 CREATE TABLE comments (

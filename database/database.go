@@ -13,7 +13,7 @@ import (
 
 // Define the PostgreSQL connection string
 func createConnString() string {
-	host := os.Getenv("DB_HOST")
+	host := os.Getenv("DB_HOSTNAME")
 	port := os.Getenv("DB_PORT")
 	password := os.Getenv("DB_PASSWORD")
 	user := os.Getenv("DB_USERNAME")
@@ -25,9 +25,10 @@ func createConnString() string {
 func InitDb() (*sql.DB, error) {
 
 	// Open a database connection
+	fmt.Println(createConnString())
 	DB, err := sql.Open("postgres", createConnString())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error opening db%v", err)
 		return nil, err
 	}
 	// defer DB.Close() // Close the database connection when done
@@ -35,7 +36,7 @@ func InitDb() (*sql.DB, error) {
 	// Check the connection
 	err = DB.Ping()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error ping with db %v", err)
 		return nil, err
 	}
 
